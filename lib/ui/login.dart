@@ -32,12 +32,11 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
   * @param -
   * @return -
   * */
-  getDeviceInfo() async{
+  getDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
 
     try {
-
-      if(Platform.isAndroid){
+      if (Platform.isAndroid) {
         AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
         setState(() {
           deviceId = androidInfo.id;
@@ -50,11 +49,9 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
           deviceId = iosInfo.identifierForVendor;
         });
       }
-
     } on PlatformException {
 
     }
-
   }
 
 
@@ -87,38 +84,37 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
   Color left = Colors.black;
   Color right = Colors.white;
 
-  saveEmail(String email) async{
+
+  saveEmail(String email) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("email", email);
   }
 
-  savePass(String pass) async{
+  savePass(String pass) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("username", pass);
   }
 
-  saveApi(String api) async{
+  saveApi(String api) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("api_key", api);
   }
 
-  Future<String> getEmail() async{
+  Future<String> getEmail() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String email = preferences.getString("email");
 
     return email;
-
   }
 
-  Future<String> getPass() async{
+  Future<String> getPass() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String pass = preferences.getString("username");
 
     return pass;
-
   }
 
-  getApi() async{
+  getApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     apiKey = preferences.getString("api_key");
   }
@@ -710,7 +706,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
   }
 
   //Registration and Login methods
-  Future _register() async{
+  Future _register() async {
     String name = signupNameController.text;
     String surname = signupSurnameController.text;
     String email = signupEmailController.text;
@@ -718,44 +714,45 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
     String confirm = signupConfirmPasswordController.text;
 
 
-    if(name.length < 2){
+    if (name.length < 2) {
       showInSnackBar("Please fill in your name.");
       return;
     }
 
-    if(surname.length < 2){
+    if (surname.length < 2) {
       showInSnackBar("Please fill in your surname.");
       return;
     }
 
-    if(email.length < 2 && !email.contains(".") && !email.contains("@") ){
+    if (email.length < 2 && !email.contains(".") && !email.contains("@")) {
       showInSnackBar("Please fill in a valid email address.");
       return;
     }
 
-    if(password.length < 5){
-      showInSnackBar("Please fill in your password, minimum length is 5 charaters.");
+    if (password.length < 5) {
+      showInSnackBar(
+          "Please fill in your password, minimum length is 5 charaters.");
       return;
     }
 
-    if(confirm != password){
+    if (confirm != password) {
       showInSnackBar("Passwords you have entered do not match.");
       return;
     }
 
 
-    try{
-      await http.post(Constants.registerUrl, body : {
+    try {
+      await http.post(Constants.registerUrl, body: {
         'user_type': userType,
         'device_id': deviceId,
         'first_name': name,
         'last_name': surname,
         'email': email,
         'password': password
-    }).then((response) async{
+      }).then((response) async {
         var message = json.decode(response.body)['response'];
 
-        if(message['status'] == '200'){
+        if (message['status'] == '200') {
           //showInSnackBar("You were successfully registered.");
 
           Map userData = message['user'];
@@ -766,63 +763,59 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
           saveApi(message['api_autho_key']);
 
           var route = new MaterialPageRoute(
-            builder: (BuildContext context) => new Welcome(userData, profileData),
+            builder: (BuildContext context) =>
+            new Welcome(userData, profileData),
           );
-          Navigator.of(context).pushAndRemoveUntil(route, (Route<dynamic> route)=> false);
-
-        }else{
+          Navigator.of(context).pushAndRemoveUntil(
+              route, (Route<dynamic> route) => false);
+        } else {
           showInSnackBar(message['message']);
         }
-
-
       });
-    }catch (e){
+    } catch (e) {
       showInSnackBar("Please check your internet connection.");
       print(e.toString());
-
     }
-
   }
 
-  Future _login() async{
-
+  Future _login() async {
     String email = loginEmailController.text;
     String password = loginPasswordController.text;
 
-    if(email.length < 2 && !email.contains(".") && !email.contains("@") ){
+    if (email.length < 2 && !email.contains(".") && !email.contains("@")) {
       showInSnackBar("Please fill in a valid email address.");
       return;
     }
 
-    if(password.length < 5){
-      showInSnackBar("Please fill in your password, minimum length is 5 charaters.");
+    if (password.length < 5) {
+      showInSnackBar(
+          "Please fill in your password, minimum length is 5 charaters.");
       return;
     }
 
-    try{
-      await http.post(Constants.loginUrl, body : {
-        'api_key' : apiKey,
+    try {
+      await http.post(Constants.loginUrl, body: {
+        'api_key': apiKey,
         'email': email,
         'password': password
-      }).then((response) async{
+      }).then((response) async {
         var message = json.decode(response.body)['response'];
 
-        if(message['status'] == '200'){
+        if (message['status'] == '200') {
           Map userData = message['user'];
           Map profileData = message['profile'];
 
           var route = new MaterialPageRoute(
             builder: (BuildContext context) => new Home(userData, profileData),
           );
-          Navigator.of(context).pushAndRemoveUntil(route, (Route<dynamic> route)=> false);
-
-        }else{
+          Navigator.of(context).pushAndRemoveUntil(
+              route, (Route<dynamic> route) => false);
+        } else {
           showInSnackBar(message['message']);
         }
       });
-    }catch (e){
+    } catch (e) {
       showInSnackBar("Please check your internet connection.");
     }
-
   }
 }

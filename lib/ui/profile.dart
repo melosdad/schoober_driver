@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:schoober_driver/constants.dart';
-import 'package:schoober_driver/style/theme.dart' as Theme;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,22 +43,8 @@ class _ProfileState extends State<Profile> {
   Map updatedProfileData;
 
 
-
   @override
   Widget build(BuildContext context) {
-    txtName.text = widget.profileData['first_name'];
-    txtSurname.text = widget.profileData['last_name'];
-
-//    if(widget.profileData['gender'] != null){
-//      txtGender.text = widget.profileData['gender'];
-//      txtCell.text = widget.profileData['cell'];
-//      txtStreet.text = widget.profileData['street_address'];
-//      txtTown.text = widget.profileData['town'];
-//      txtProvince.text = widget.profileData['province'];
-//      txtCode.text = widget.profileData['code'];
-//    }
-
-
     return new Scaffold(
       key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -245,7 +230,7 @@ class _ProfileState extends State<Profile> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.user,
+                              FontAwesomeIcons.transgender,
                               color: Colors.black,
                             ),
                             hintText: "Gender",
@@ -274,7 +259,7 @@ class _ProfileState extends State<Profile> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.user,
+                              FontAwesomeIcons.phone,
                               color: Colors.black,
                             ),
                             hintText: "Cell Number",
@@ -301,7 +286,7 @@ class _ProfileState extends State<Profile> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.envelope,
+                              FontAwesomeIcons.mapMarkerAlt,
                               color: Colors.black,
                             ),
                             hintText: "Street Address",
@@ -329,7 +314,7 @@ class _ProfileState extends State<Profile> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.envelope,
+                              FontAwesomeIcons.mapMarkerAlt,
                               color: Colors.black,
                             ),
                             hintText: "Town",
@@ -357,7 +342,7 @@ class _ProfileState extends State<Profile> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.envelope,
+                              FontAwesomeIcons.mapMarkerAlt,
                               color: Colors.black,
                             ),
                             hintText: "Province",
@@ -378,7 +363,7 @@ class _ProfileState extends State<Profile> {
                         child: TextField(
                           controller: txtCode,
                           focusNode: txtCodeFocus,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           style: TextStyle(
                               fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,
@@ -386,7 +371,7 @@ class _ProfileState extends State<Profile> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.envelope,
+                              FontAwesomeIcons.mapMarkerAlt,
                               color: Colors.black,
                             ),
                             hintText: "Postal Code",
@@ -513,6 +498,15 @@ class _ProfileState extends State<Profile> {
 
     updatedUserData = widget.userData;
     updatedProfileData = widget.profileData;
+
+    txtName.text = updatedProfileData['first_name'];
+    txtSurname.text = updatedProfileData['last_name'];
+    txtGender.text = updatedProfileData['gender'];
+    txtCell.text = updatedProfileData['cell'];
+    txtStreet.text = updatedProfileData['street_address'];
+    txtTown.text = updatedProfileData['town'];
+    txtProvince.text = updatedProfileData['province'];
+    txtCode.text = updatedProfileData['code'];
   }
 
   void showInSnackBar(String value) {
@@ -594,11 +588,11 @@ class _ProfileState extends State<Profile> {
     try {
       await http.post(Constants.updateProfile, body: {
         'api_key': apiKey,
-        'id': widget.userData['id'],
+        'user_id': updatedUserData['user_id'],
         'first_name': name,
         'last_name': surname,
         'gender': gender,
-        'cell': cell,
+        'cell_number': cell,
         'street_address': street,
         'town': town,
         'province': province,
@@ -606,17 +600,20 @@ class _ProfileState extends State<Profile> {
       }).then((response) async {
         var message = json.decode(response.body)['response'];
 
-        if (message['status'] == '200') {
-          showInSnackBar("Your profile was successfully updated.");
-
-          updatedUserData = message['user'];
-          updatedProfileData = message['profile'];
-        } else {
-          showInSnackBar(message['message']);
-        }
+        print(message);
+//        if (message['status'] == '200') {
+//          showInSnackBar("Your profile was successfully updated.");
+//
+//          setState(() {
+//            updatedProfileData = message['profile'];
+//          });
+//
+//        } else {
+//          showInSnackBar(message['message']);
+//        }
       });
     } catch (e) {
-      showInSnackBar("Please check your internet connection.");
+//      showInSnackBar(e.toString());
       print(e.toString());
     }
   }
