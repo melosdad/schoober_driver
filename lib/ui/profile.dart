@@ -6,12 +6,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:schoober_driver/constants.dart';
 import 'package:schoober_driver/style/theme.dart' as Theme;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   final Map userData;
   final Map profileData;
 
   Profile(this.userData, this.profileData);
+
   @override
   _ProfileState createState() => new _ProfileState();
 }
@@ -41,17 +43,22 @@ class _ProfileState extends State<Profile> {
   Map updatedUserData;
   Map updatedProfileData;
 
+
+
   @override
   Widget build(BuildContext context) {
-
     txtName.text = widget.profileData['first_name'];
     txtSurname.text = widget.profileData['last_name'];
-    txtGender.text = widget.profileData['gender'];
-    txtCell.text = widget.profileData['cell'];
-    txtStreet.text = widget.profileData['street_address'];
-    txtTown.text = widget.profileData['town'];
-    txtProvince.text = widget.profileData['province'];
-    txtCode.text = widget.profileData['code'];
+
+//    if(widget.profileData['gender'] != null){
+//      txtGender.text = widget.profileData['gender'];
+//      txtCell.text = widget.profileData['cell'];
+//      txtStreet.text = widget.profileData['street_address'];
+//      txtTown.text = widget.profileData['town'];
+//      txtProvince.text = widget.profileData['province'];
+//      txtCode.text = widget.profileData['code'];
+//    }
+
 
     return new Scaffold(
       key: _scaffoldKey,
@@ -90,7 +97,8 @@ class _ProfileState extends State<Profile> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 50.0),
-                  child: Text("Profile", style: TextStyle(fontSize: 30.0,fontFamily: "WorkSansSemiBold",),),
+                  child: Text("Profile", style: TextStyle(
+                    fontSize: 30.0, fontFamily: "WorkSansSemiBold",),),
                 ),
                 Container(
                   width: 250.0,
@@ -100,10 +108,10 @@ class _ProfileState extends State<Profile> {
                 Expanded(
                   flex: 1,
                   child:
-                      new ConstrainedBox(
-                        constraints: const BoxConstraints.expand(),
-                        child: _buildSignUp(context),
-                      ),
+                  new ConstrainedBox(
+                    constraints: const BoxConstraints.expand(),
+                    child: _buildSignUp(context),
+                  ),
 
                 ),
               ],
@@ -125,18 +133,6 @@ class _ProfileState extends State<Profile> {
             margin: EdgeInsets.only(top: 0.0),
             decoration: new BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
-//                  boxShadow: <BoxShadow>[
-//                    BoxShadow(
-//                      color: Colors.blue,
-//                      offset: Offset(1.0, 6.0),
-//                      blurRadius: 20.0,
-//                    ),
-//                    BoxShadow(
-//                      color: Colors.lightBlue,
-//                      offset: Offset(1.0, 6.0),
-//                      blurRadius: 20.0,
-//                    ),
-//                  ],
               gradient: new LinearGradient(
                   colors: [
                     Colors.blue,
@@ -178,7 +174,7 @@ class _ProfileState extends State<Profile> {
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                           bottom: 20.0, left: 25.0, right: 25.0),
+                            bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
                           controller: txtName,
                           focusNode: txtNameFocus,
@@ -269,7 +265,7 @@ class _ProfileState extends State<Profile> {
                         child: TextField(
                           controller: txtCell,
                           focusNode: txtCellFocus,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.phone,
                           textCapitalization: TextCapitalization.words,
                           style: TextStyle(
                               fontFamily: "WorkSansSemiBold",
@@ -296,8 +292,7 @@ class _ProfileState extends State<Profile> {
                         padding: EdgeInsets.only(
                             top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
-controller: txtStreet,
-                          focusNode: txtStreetFocus,
+                          controller: txtStreet,
                           keyboardType: TextInputType.text,
                           style: TextStyle(
                               fontFamily: "WorkSansSemiBold",
@@ -324,7 +319,7 @@ controller: txtStreet,
                         padding: EdgeInsets.only(
                             top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
-controller: txtTown,
+                          controller: txtTown,
                           focusNode: txtTownFocus,
                           keyboardType: TextInputType.text,
                           style: TextStyle(
@@ -352,7 +347,7 @@ controller: txtTown,
                         padding: EdgeInsets.only(
                             top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
-controller: txtProvince,
+                          controller: txtProvince,
                           focusNode: txtProvinceFocus,
                           keyboardType: TextInputType.text,
                           style: TextStyle(
@@ -381,7 +376,7 @@ controller: txtProvince,
                         padding: EdgeInsets.only(
                             top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
-      controller: txtCode,
+                          controller: txtCode,
                           focusNode: txtCodeFocus,
                           keyboardType: TextInputType.text,
                           style: TextStyle(
@@ -446,7 +441,7 @@ controller: txtProvince,
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: (){
+                    onPressed: () {
                       _update();
                     }),
               ),
@@ -492,11 +487,13 @@ controller: txtProvince,
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: (){
+                    onPressed: () {
                       var route = new MaterialPageRoute(
-                        builder: (BuildContext context) => new Home(updatedUserData, updatedProfileData),
+                        builder: (BuildContext context) =>
+                        new Home(updatedUserData, updatedProfileData),
                       );
-                      Navigator.of(context).pushAndRemoveUntil(route, (Route<dynamic> route)=> false);
+                      Navigator.of(context).pushAndRemoveUntil(
+                          route, (Route<dynamic> route) => false);
                     }),
               ),
             ],
@@ -516,7 +513,6 @@ controller: txtProvince,
 
     updatedUserData = widget.userData;
     updatedProfileData = widget.profileData;
-
   }
 
   void showInSnackBar(String value) {
@@ -536,7 +532,14 @@ controller: txtProvince,
     ));
   }
 
-  Future _update() async{
+  var apiKey;
+
+  getApi() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    apiKey = preferences.getString("api_key");
+  }
+
+  Future _update() async {
     String name = txtName.text;
     String surname = txtSurname.text;
     String gender = txtGender.text;
@@ -547,79 +550,75 @@ controller: txtProvince,
     String code = txtCode.text;
 
 
-    if(name.length < 2){
-      showInSnackBar("Please fill in your name.");
-      return;
-    }
+//    if (name.length < 2) {
+//      showInSnackBar("Please fill in your name.");
+//      return;
+//    }
+//
+//    if (surname.length < 2) {
+//      showInSnackBar("Please fill in your surname.");
+//      return;
+//    }
+//
+//    if (cell.length < 10) {
+//      showInSnackBar("Please fill in a valid cell number.");
+//      return;
+//    }
+//
+//    if (gender.length < 2) {
+//      showInSnackBar("Please fill in your gender.");
+//      return;
+//    }
+//
+//    if (street.length < 2) {
+//      showInSnackBar("Please fill in your street address");
+//      return;
+//    }
+//
+//    if (town.length < 2) {
+//      showInSnackBar("Please fill in your town.");
+//      return;
+//    }
+//
+//    if (province.length < 2) {
+//      showInSnackBar("Please fill in your province.");
+//      return;
+//    }
+//
+//    if (code.length < 2) {
+//      showInSnackBar("Please fill in your postal code.");
+//      return;
+//    }
 
-    if(surname.length < 2){
-      showInSnackBar("Please fill in your surname.");
-      return;
-    }
 
-    if(cell.length < 10){
-      showInSnackBar("Please fill in a valid cell number.");
-      return;
-    }
-
-    if(gender.length < 2){
-      showInSnackBar("Please fill in your gender.");
-      return;
-    }
-
-    if(street.length < 2){
-      showInSnackBar("Please fill in your street address");
-      return;
-    }
-
-    if(town.length < 2){
-      showInSnackBar("Please fill in your town.");
-      return;
-    }
-
-    if(province.length < 2){
-      showInSnackBar("Please fill in your province.");
-      return;
-    }
-
-    if(code.length < 2){
-      showInSnackBar("Please fill in your postal code.");
-      return;
-    }
-
-
-
-    try{
-      await http.post(Constants.updateProfile, body : {
+    try {
+      await http.post(Constants.updateProfile, body: {
+        'api_key': apiKey,
         'id': widget.userData['id'],
         'first_name': name,
         'last_name': surname,
+        'gender': gender,
+        'cell': cell,
         'street_address': street,
         'town': town,
-        'province':province,
-        'code':code
-      }).then((response) async{
+        'province': province,
+        'code': code
+      }).then((response) async {
         var message = json.decode(response.body)['response'];
 
-        if(message['status'] == '200'){
+        if (message['status'] == '200') {
           showInSnackBar("Your profile was successfully updated.");
 
           updatedUserData = message['user'];
           updatedProfileData = message['profile'];
-
-
-        }else{
+        } else {
           showInSnackBar(message['message']);
         }
-
-
       });
-    }catch (e){
+    } catch (e) {
       showInSnackBar("Please check your internet connection.");
       print(e.toString());
-
     }
-
   }
 
 }

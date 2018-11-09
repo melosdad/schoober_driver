@@ -24,6 +24,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
   var deviceId;
   var userType = 'Driver';
+  var apiKey;
 
   /*
   * Get device unique ID
@@ -117,12 +118,9 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
   }
 
-  Future<String> getApi() async{
+  getApi() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String api = preferences.getString("api_key");
-
-    return api;
-
+    apiKey = preferences.getString("api_key");
   }
 
   @override
@@ -231,6 +229,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
     _pageController = PageController();
     getDeviceInfo();
+    getApi();
   }
 
   void showInSnackBar(String value) {
@@ -764,7 +763,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
           savePass(password);
           saveEmail(email);
-          saveApi(userData['hash_value']);
+          saveApi(message['api_autho_key']);
 
           var route = new MaterialPageRoute(
             builder: (BuildContext context) => new Welcome(userData, profileData),
@@ -802,6 +801,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
     try{
       await http.post(Constants.loginUrl, body : {
+        'api_key' : apiKey,
         'email': email,
         'password': password
       }).then((response) async{

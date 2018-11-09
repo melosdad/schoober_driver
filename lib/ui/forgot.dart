@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:schoober_driver/style/theme.dart' as Theme;
 import 'package:http/http.dart' as http;
 import 'package:schoober_driver/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -24,6 +25,7 @@ class _ForgotState extends State<Forgot> {
 
   @override
   Widget build(BuildContext context) {
+    getApi();
     return new Scaffold(
       key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -202,6 +204,14 @@ class _ForgotState extends State<Forgot> {
     ));
   }
 
+  var apiKey;
+
+   getApi() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    apiKey = preferences.getString("api_key");
+  }
+
+
   Future _forgot() async{
 
     String email = loginEmailController.text;
@@ -215,6 +225,7 @@ class _ForgotState extends State<Forgot> {
 
     try{
       await http.post(Constants.forgotPasswordUrl, body : {
+        'api_key' : apiKey,
         'email': email
       }).then((response) async{
         var message = json.decode(response.body)['response'];
@@ -227,6 +238,7 @@ class _ForgotState extends State<Forgot> {
       });
     }catch (e){
       showInSnackBar("Please check your internet connection.");
+      print(e.toString());
     }
 
   }
