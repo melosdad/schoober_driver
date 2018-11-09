@@ -1,0 +1,41 @@
+name: schoober_driver
+description: Schoober for transport drivers.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  device_info: ^0.2.1
+  cupertino_icons: ^0.1.2
+  shared_preferences: ^0.4.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  font_awesome_flutter: ^8.0.1
+flutter:
+
+  uses-material-design: true
+
+  assets:
+        - assets/login_logo.png
+        - assets/logo.png
+
+  fonts:
+    - family: WorkSansSemiBold
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Semibold.ttf
+
+    - family: WorkSansBold
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Bold.ttf
+
+    - family: WorkSansMedium
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Medium.ttf
+
