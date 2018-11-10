@@ -6,21 +6,23 @@ import 'package:schoober_driver/style/theme.dart' as Theme;
 import 'package:http/http.dart' as http;
 import 'package:schoober_driver/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:schoober_driver/ui/code.dart';
+import 'package:schoober_driver/ui/login.dart';
 
-
-
-class Forgot extends StatefulWidget {
+class Password extends StatefulWidget {
+  final Map userProfile;
+  Password(this.userProfile);
   @override
-  _ForgotState createState() => new _ForgotState();
+  _PasswordState createState() => new _PasswordState();
 }
 
-class _ForgotState extends State<Forgot> {
+class _PasswordState extends State<Password> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final FocusNode myFocusNodeEmailForgot = FocusNode();
+  final FocusNode focusNewPassword = FocusNode();
+  final FocusNode focusConfirmNewPassword = FocusNode();
 
-  TextEditingController forgotEmailController = new TextEditingController();
+  TextEditingController txtNewPassword = new TextEditingController();
+  TextEditingController txtConfirmNewPassword = new TextEditingController();
 
   @override
   void initState() {
@@ -30,7 +32,6 @@ class _ForgotState extends State<Forgot> {
 
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
       key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -79,7 +80,7 @@ class _ForgotState extends State<Forgot> {
                   child:
                   new ConstrainedBox(
                     constraints: const BoxConstraints.expand(),
-                    child: _buildForgot(context),
+                    child: _buildNewPassword(context),
                   ),
 
                 ),
@@ -92,7 +93,7 @@ class _ForgotState extends State<Forgot> {
     );
   }
 
-  Widget _buildForgot(BuildContext context) {
+  Widget _buildNewPassword(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 23.0),
       child: Column(
@@ -109,16 +110,17 @@ class _ForgotState extends State<Forgot> {
                 ),
                 child: Container(
                   width: 300.0,
-//                  height: 190.0,
+                  height: 190.0,
                   child: Column(
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
                             top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
-                          focusNode: myFocusNodeEmailForgot,
-                          controller: forgotEmailController,
-                          keyboardType: TextInputType.emailAddress,
+                          focusNode: focusNewPassword,
+                          controller: txtNewPassword,
+                          keyboardType: TextInputType.text,
+                          obscureText: true,
                           style: TextStyle(
                               fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,
@@ -126,11 +128,41 @@ class _ForgotState extends State<Forgot> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.envelope,
+                              FontAwesomeIcons.lock,
                               color: Colors.black,
                               size: 22.0,
                             ),
-                            hintText: "Email Address",
+                            hintText: "New Password",
+                            hintStyle: TextStyle(
+                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 250.0,
+                        height: 1.0,
+                        color: Colors.grey[400],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                        child: TextField(
+                          focusNode: focusConfirmNewPassword,
+                          controller: txtConfirmNewPassword,
+                          keyboardType: TextInputType.text,
+                          obscureText: true,
+                          style: TextStyle(
+                              fontFamily: "WorkSansSemiBold",
+                              fontSize: 16.0,
+                              color: Colors.black),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(
+                              FontAwesomeIcons.lock,
+                              color: Colors.black,
+                              size: 22.0,
+                            ),
+                            hintText: "Confirm New Password",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                           ),
@@ -141,7 +173,7 @@ class _ForgotState extends State<Forgot> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 70.0),
+                margin: EdgeInsets.only(top: 170.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
 //                  boxShadow: <BoxShadow>[
@@ -166,28 +198,65 @@ class _ForgotState extends State<Forgot> {
                       stops: [0.0, 1.0],
                       tileMode: TileMode.clamp),
                 ),
-                child: MaterialButton(
-                    highlightColor: Colors.transparent,
-                    splashColor: Theme.Colors.loginGradientEnd,
-                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 10.0),
-                      child: Text(
-                        "Reset Password",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontFamily: "WorkSansBold"),
-                      ),
-                    ),
-                    onPressed: (){
-                      _forgot();
-                    }),
+                child:
+
+                    new Column(
+                      children: <Widget>[
+
+                        MaterialButton(
+                            highlightColor: Colors.transparent,
+                            splashColor: Theme.Colors.loginGradientEnd,
+                            //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 10.0),
+                              child: Text(
+                                "Save Password",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.0,
+                                    fontFamily: "WorkSansBold"),
+                              ),
+                            ),
+                            onPressed: () {
+                              _newPassword();
+                            }),
+                        Container(
+                          width: 250.0,
+                          height: 6.0,
+                          color: Colors.white,
+                        ),
+                        MaterialButton(
+                            highlightColor: Colors.transparent,
+                            splashColor: Theme.Colors.loginGradientEnd,
+                            //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 10.0),
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.0,
+                                    fontFamily: "WorkSansBold"),
+                              ),
+                            ),
+                            onPressed: () {
+                              var route = new MaterialPageRoute(
+                                builder: (BuildContext context) => new Login(),
+                              );
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  route, (Route<dynamic> route) => false);
+                            })
+
+                      ],
+                    )
+
+                ,
               ),
             ],
           ),
-             ],
+        ],
       ),
     );
   }
@@ -211,44 +280,41 @@ class _ForgotState extends State<Forgot> {
 
   var apiKey = "";
 
-   getApi() async{
+  getApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     apiKey = preferences.getString("api_key");
   }
 
 
-   _forgot() async{
+  _newPassword() async {
+    String newPassword = txtNewPassword.text;
+    String confirmNewPassword = txtConfirmNewPassword.text;
 
-    String email = forgotEmailController.text;
-
-    if(email.length < 2 || email.contains(".") == false || email.contains("@") == false ){
-      showInSnackBar("Please fill in a valid email address.");
+    if (newPassword.length < 5) {
+      showInSnackBar("Please fill in your password, minimum length is 5 charaters.");
       return;
     }
 
-    try{
-      await http.post(Constants.forgotPasswordUrl, body : {
-        'api_key' : apiKey,
-        'email': email
-      }).then((response) async{
+    if (confirmNewPassword != newPassword) {
+      showInSnackBar("The passwords you have entered do not match.");
+      return;
+    }
+
+    try {
+      await http.post(Constants.resetPasswordUrl+"?api_key="+apiKey, body: {
+        'password': newPassword,
+        'user_id': widget.userProfile['user_id']
+      }).then((response) async {
         var message = json.decode(response.body)['response'];
-
-        if(message['status'] == '200'){
-          Map userProfile = message['profile'];
-
-          var route = new MaterialPageRoute(
-            builder: (BuildContext context) => new Code(userProfile),
-          );
-          Navigator.of(context).push(route);
-
-        }else{
+        if (message['status'] == '200') {
+          showInSnackBar("Your new password was successfully saved. You can now login.");
+        } else {
           showInSnackBar(message['message']);
         }
       });
-    }catch (e){
+    } catch (e) {
       showInSnackBar("Please check your internet connection.");
       print(e.toString());
     }
-
   }
 }

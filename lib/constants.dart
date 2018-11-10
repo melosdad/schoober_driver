@@ -5,6 +5,7 @@ class Constants{
   static final String completeRegUrl = baseUrl + "completeRegistration";
   static final String loginUrl = baseUrl + "login";
   static final String updateProfile = baseUrl + "updateUserProfile";
-  static final String forgotPasswordUrl = baseUrl + "resetPassword";
-
+  static final String forgotPasswordUrl = baseUrl + "resetPasswordCode";
+  static final String confirmCodeUrl = baseUrl + "confirmResetCode";
+  static final String resetPasswordUrl = baseUrl + "resetPassword";
 }

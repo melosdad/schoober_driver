@@ -498,11 +498,12 @@ class _ProfileState extends State<Profile> {
 
     updatedUserData = widget.userData;
     updatedProfileData = widget.profileData;
+    getApi();
 
     txtName.text = updatedProfileData['first_name'];
     txtSurname.text = updatedProfileData['last_name'];
     txtGender.text = updatedProfileData['gender'];
-    txtCell.text = updatedProfileData['cell'];
+    txtCell.text = updatedProfileData['cell_number'];
     txtStreet.text = updatedProfileData['street_address'];
     txtTown.text = updatedProfileData['town'];
     txtProvince.text = updatedProfileData['province'];
@@ -526,7 +527,7 @@ class _ProfileState extends State<Profile> {
     ));
   }
 
-  var apiKey;
+  var apiKey = "";
 
   getApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -544,51 +545,51 @@ class _ProfileState extends State<Profile> {
     String code = txtCode.text;
 
 
-//    if (name.length < 2) {
-//      showInSnackBar("Please fill in your name.");
-//      return;
-//    }
-//
-//    if (surname.length < 2) {
-//      showInSnackBar("Please fill in your surname.");
-//      return;
-//    }
-//
-//    if (cell.length < 10) {
-//      showInSnackBar("Please fill in a valid cell number.");
-//      return;
-//    }
-//
-//    if (gender.length < 2) {
-//      showInSnackBar("Please fill in your gender.");
-//      return;
-//    }
-//
-//    if (street.length < 2) {
-//      showInSnackBar("Please fill in your street address");
-//      return;
-//    }
-//
-//    if (town.length < 2) {
-//      showInSnackBar("Please fill in your town.");
-//      return;
-//    }
-//
-//    if (province.length < 2) {
-//      showInSnackBar("Please fill in your province.");
-//      return;
-//    }
-//
-//    if (code.length < 2) {
-//      showInSnackBar("Please fill in your postal code.");
-//      return;
-//    }
+    if (name.length < 2) {
+      showInSnackBar("Please fill in your name.");
+      return;
+    }
+
+    if (surname.length < 2) {
+      showInSnackBar("Please fill in your surname.");
+      return;
+    }
+
+    if (cell.length < 10) {
+      showInSnackBar("Please fill in a valid cell number.");
+      return;
+    }
+
+    if (gender.length < 2) {
+      showInSnackBar("Please fill in your gender.");
+      return;
+    }
+
+    if (street.length < 2) {
+      showInSnackBar("Please fill in your street address");
+      return;
+    }
+
+    if (town.length < 2) {
+      showInSnackBar("Please fill in your town.");
+      return;
+    }
+
+    if (province.length < 2) {
+      showInSnackBar("Please fill in your province.");
+      return;
+    }
+
+    if (code.length < 2) {
+      showInSnackBar("Please fill in your postal code.");
+      return;
+    }
 
 
     try {
       await http.post(Constants.updateProfile, body: {
         'api_key': apiKey,
-        'user_id': updatedUserData['user_id'],
+        'user_id': widget.userData['user_id'],
         'first_name': name,
         'last_name': surname,
         'gender': gender,
@@ -599,22 +600,19 @@ class _ProfileState extends State<Profile> {
         'code': code
       }).then((response) async {
         var message = json.decode(response.body)['response'];
+        if (message['status'] == '200') {
+          showInSnackBar("Your profile was successfully updated.");
 
-        print(message);
-//        if (message['status'] == '200') {
-//          showInSnackBar("Your profile was successfully updated.");
-//
-//          setState(() {
-//            updatedProfileData = message['profile'];
-//          });
-//
-//        } else {
-//          showInSnackBar(message['message']);
-//        }
+          setState(() {
+            updatedProfileData = message['profile'];
+          });
+
+        } else {
+          showInSnackBar(message['message']);
+        }
       });
     } catch (e) {
-//      showInSnackBar(e.toString());
-      print(e.toString());
+      showInSnackBar("Please check your internet connection.");
     }
   }
 

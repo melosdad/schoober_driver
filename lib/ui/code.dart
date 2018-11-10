@@ -6,21 +6,24 @@ import 'package:schoober_driver/style/theme.dart' as Theme;
 import 'package:http/http.dart' as http;
 import 'package:schoober_driver/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:schoober_driver/ui/code.dart';
+import 'package:schoober_driver/ui/password.dart';
 
 
 
-class Forgot extends StatefulWidget {
+class Code extends StatefulWidget {
+  final Map userProfile;
+
+  Code(this.userProfile);
   @override
-  _ForgotState createState() => new _ForgotState();
+  _CodeState createState() => new _CodeState();
 }
 
-class _ForgotState extends State<Forgot> {
+class _CodeState extends State<Code> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FocusNode myFocusNodeEmailForgot = FocusNode();
 
-  TextEditingController forgotEmailController = new TextEditingController();
+  TextEditingController txtCode = new TextEditingController();
 
   @override
   void initState() {
@@ -117,8 +120,8 @@ class _ForgotState extends State<Forgot> {
                             top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: myFocusNodeEmailForgot,
-                          controller: forgotEmailController,
-                          keyboardType: TextInputType.emailAddress,
+                          controller: txtCode,
+                          keyboardType: TextInputType.text,
                           style: TextStyle(
                               fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,
@@ -126,11 +129,11 @@ class _ForgotState extends State<Forgot> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.envelope,
+                              FontAwesomeIcons.lock,
                               color: Colors.black,
                               size: 22.0,
                             ),
-                            hintText: "Email Address",
+                            hintText: "Reset Code",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                           ),
@@ -174,7 +177,7 @@ class _ForgotState extends State<Forgot> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 10.0),
                       child: Text(
-                        "Reset Password",
+                        "Confirm Code",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25.0,
@@ -187,7 +190,7 @@ class _ForgotState extends State<Forgot> {
               ),
             ],
           ),
-             ],
+        ],
       ),
     );
   }
@@ -211,36 +214,34 @@ class _ForgotState extends State<Forgot> {
 
   var apiKey = "";
 
-   getApi() async{
+  getApi() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     apiKey = preferences.getString("api_key");
   }
 
 
-   _forgot() async{
+  _forgot() async{
 
-    String email = forgotEmailController.text;
+    String code = txtCode.text;
 
-    if(email.length < 2 || email.contains(".") == false || email.contains("@") == false ){
-      showInSnackBar("Please fill in a valid email address.");
+    if(code.length < 2 ){
+      showInSnackBar("Please fill in a valid reset code, check your emails for your code.");
       return;
     }
 
     try{
-      await http.post(Constants.forgotPasswordUrl, body : {
+      await http.post(Constants.confirmCodeUrl, body : {
         'api_key' : apiKey,
-        'email': email
+        'code': code,
+        'user_id': widget.userProfile['user_id']
       }).then((response) async{
         var message = json.decode(response.body)['response'];
 
         if(message['status'] == '200'){
-          Map userProfile = message['profile'];
-
           var route = new MaterialPageRoute(
-            builder: (BuildContext context) => new Code(userProfile),
+            builder: (BuildContext context) => new Password(widget.userProfile),
           );
           Navigator.of(context).push(route);
-
         }else{
           showInSnackBar(message['message']);
         }
