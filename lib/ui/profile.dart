@@ -118,7 +118,7 @@ class _ProfileState extends State<Profile> {
                     image: new DecorationImage(
                         fit: BoxFit.fill,
                         image: new NetworkImage(
-                            "https://i.imgur.com/BoN9kdC.png")
+                            "https://randomuser.me/api/portraits/lego/0.jpg")
                     )
                 )),
           ),

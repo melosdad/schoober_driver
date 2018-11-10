@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Schoober Driver',
-      theme: new ThemeData(      
+      theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: new Login(),

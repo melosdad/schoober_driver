@@ -100,14 +100,14 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
     await preferences.setString("api_key", api);
   }
 
-  Future<String> getEmail() async {
+  Future<String> _getEmail() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String email = preferences.getString("email");
 
     return email;
   }
 
-  Future<String> getPass() async {
+  Future<String> _getPass() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String pass = preferences.getString("username");
 
@@ -226,6 +226,29 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
     _pageController = PageController();
     getDeviceInfo();
     getApi();
+
+//    String userEmail = "";
+//    String userPass = "";
+//
+//    void setEmail(String email){
+//      userEmail = email;
+//    }
+//
+//    void setPass(String pass){
+//      userPass = pass;
+//    }
+//
+//    _getEmail().then(setEmail);
+//    _getPass().then(setPass);
+//
+//    if(userEmail.length > 0 && userPass.length > 0){
+//      loginEmailController.text = userEmail;
+//      loginPasswordController.text = userPass;
+//      _login();
+//    }
+//
+//    print(userEmail);
+//    print(userPass);
   }
 
   void showInSnackBar(String value) {
