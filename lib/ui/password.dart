@@ -24,6 +24,9 @@ class _PasswordState extends State<Password> {
   TextEditingController txtNewPassword = new TextEditingController();
   TextEditingController txtConfirmNewPassword = new TextEditingController();
 
+  bool _obscureNewPassword = true;
+  bool _obscureConfirmNewPassword = true;
+
   @override
   void initState() {
     getApi();
@@ -120,7 +123,7 @@ class _PasswordState extends State<Password> {
                           focusNode: focusNewPassword,
                           controller: txtNewPassword,
                           keyboardType: TextInputType.text,
-                          obscureText: true,
+                          obscureText: _obscureNewPassword,
                           style: TextStyle(
                               fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,
@@ -135,6 +138,14 @@ class _PasswordState extends State<Password> {
                             hintText: "New Password",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                            suffixIcon: GestureDetector(
+                              onTap: _toggleNewPassword,
+                              child: Icon(
+                                FontAwesomeIcons.eye,
+                                size: 15.0,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -150,7 +161,7 @@ class _PasswordState extends State<Password> {
                           focusNode: focusConfirmNewPassword,
                           controller: txtConfirmNewPassword,
                           keyboardType: TextInputType.text,
-                          obscureText: true,
+                          obscureText: _obscureConfirmNewPassword,
                           style: TextStyle(
                               fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,
@@ -165,6 +176,14 @@ class _PasswordState extends State<Password> {
                             hintText: "Confirm New Password",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                            suffixIcon: GestureDetector(
+                              onTap: _toggleConfirmNewPassword,
+                              child: Icon(
+                                FontAwesomeIcons.eye,
+                                size: 15.0,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -285,7 +304,6 @@ class _PasswordState extends State<Password> {
     apiKey = preferences.getString("api_key");
   }
 
-
   _newPassword() async {
     String newPassword = txtNewPassword.text;
     String confirmNewPassword = txtConfirmNewPassword.text;
@@ -316,5 +334,17 @@ class _PasswordState extends State<Password> {
       showInSnackBar("Please check your internet connection.");
       print(e.toString());
     }
+  }
+
+  void _toggleNewPassword() {
+    setState(() {
+      _obscureNewPassword = !_obscureNewPassword;
+    });
+  }
+
+  void _toggleConfirmNewPassword() {
+    setState(() {
+      _obscureConfirmNewPassword = !_obscureConfirmNewPassword;
+    });
   }
 }

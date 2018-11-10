@@ -630,7 +630,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                               FontAwesomeIcons.lock,
                               color: Colors.black,
                             ),
-                            hintText: "Confirmation",
+                            hintText: "Confirm Password",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 16.0),
                             suffixIcon: GestureDetector(
