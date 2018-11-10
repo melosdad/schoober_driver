@@ -227,6 +227,9 @@ class _ForgotState extends State<Forgot> {
     String email = forgotEmailController.text;
 
     if(email.length < 2 || email.contains(".") == false || email.contains("@") == false ){
+      setState(() {
+        isChecking = false;
+      });
       showInSnackBar("Please fill in a valid email address.");
       return;
     }
@@ -259,7 +262,7 @@ class _ForgotState extends State<Forgot> {
         isChecking = false;
       });
       showInSnackBar("Please check your internet connection.");
-      print(e.toString());
+
     }
 
   }

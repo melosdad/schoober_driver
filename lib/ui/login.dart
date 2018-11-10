@@ -745,27 +745,42 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
 
     if (name.length < 2) {
+      setState(() {
+        isRegistering = false;
+      });
       showInSnackBar("Please fill in your name.");
       return;
     }
 
     if (surname.length < 2) {
+      setState(() {
+        isRegistering = false;
+      });
       showInSnackBar("Please fill in your surname.");
       return;
     }
 
     if (email.length < 2 && !email.contains(".") && !email.contains("@")) {
+      setState(() {
+        isRegistering = false;
+      });
       showInSnackBar("Please fill in a valid email address.");
       return;
     }
 
     if (password.length < 5) {
+      setState(() {
+        isRegistering = false;
+      });
       showInSnackBar(
           "Please fill in your password, minimum length is 5 charaters.");
       return;
     }
 
     if (confirm != password) {
+      setState(() {
+        isRegistering = false;
+      });
       showInSnackBar("Passwords you have entered do not match.");
       return;
     }
@@ -810,7 +825,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
         isRegistering = false;
       });
       showInSnackBar("Please check your internet connection.");
-      print(e.toString());
+
     }
   }
 
@@ -823,11 +838,17 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
     String password = loginPasswordController.text;
 
     if (email.length < 2 && !email.contains(".") && !email.contains("@")) {
+      setState(() {
+        isLogin = false;
+      });
       showInSnackBar("Please fill in a valid email address.");
       return;
     }
 
     if (password.length < 5) {
+      setState(() {
+        isLogin = false;
+      });
       showInSnackBar(
           "Please fill in your password, minimum length is 5 charaters.");
       return;

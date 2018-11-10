@@ -14,8 +14,9 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="schoober_driver"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Schoober Driver"
+        android:debuggable="false"
+        android:icon="@mipmap/schoober">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -23,10 +24,6 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            <!-- This keeps the window background of the activity showing
-                 until Flutter renders its first frame. It can be removed if
-                 there is no splash screen (such as the default splash screen
-                 defined in @style/LaunchTheme). -->
             <meta-data
                 android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
                 android:value="true" />

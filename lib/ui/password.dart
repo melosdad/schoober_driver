@@ -316,11 +316,17 @@ class _PasswordState extends State<Password> {
     String confirmNewPassword = txtConfirmNewPassword.text;
 
     if (newPassword.length < 5) {
+      setState(() {
+        isUpdating = false;
+      });
       showInSnackBar("Please fill in your password, minimum length is 5 charaters.");
       return;
     }
 
     if (confirmNewPassword != newPassword) {
+      setState(() {
+        isUpdating = false;
+      });
       showInSnackBar("The passwords you have entered do not match.");
       return;
     }
@@ -347,7 +353,6 @@ class _PasswordState extends State<Password> {
         isUpdating = false;
       });
       showInSnackBar("Please check your internet connection.");
-      print(e.toString());
     }
   }
 

@@ -230,6 +230,9 @@ class _CodeState extends State<Code> {
     String code = txtCode.text;
 
     if(code.length < 2 ){
+      setState(() {
+        isChecking = false;
+      });
       showInSnackBar("Please fill in a valid reset code, check your emails for your code.");
       return;
     }
@@ -261,7 +264,7 @@ class _CodeState extends State<Code> {
         isChecking = false;
       });
       showInSnackBar("Please check your internet connection.");
-      print(e.toString());
+
     }
 
   }

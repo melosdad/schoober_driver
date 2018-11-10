@@ -519,41 +519,73 @@ class _ProfileState extends State<Profile> {
 
 
     if (name.length < 2) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please fill in your name.");
       return;
     }
 
     if (surname.length < 2) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please fill in your surname.");
       return;
     }
 
     if (cell.length < 10) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please fill in a valid cell number.");
       return;
     }
 
     if (gender.length < 2) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please fill in your gender.");
       return;
     }
 
     if (street.length < 2) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please fill in your street address");
       return;
     }
 
     if (town.length < 2) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please fill in your town.");
       return;
     }
 
     if (province.length < 2) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please fill in your province.");
       return;
     }
 
     if (code.length < 2) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please fill in your postal code.");
       return;
     }
