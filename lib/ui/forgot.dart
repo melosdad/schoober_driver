@@ -22,6 +22,7 @@ class _ForgotState extends State<Forgot> {
 
   TextEditingController forgotEmailController = new TextEditingController();
 
+  var isChecking = false;
   @override
   void initState() {
     getApi();
@@ -140,7 +141,7 @@ class _ForgotState extends State<Forgot> {
                   ),
                 ),
               ),
-              Container(
+              isChecking ? Center(child: CircularProgressIndicator(),) : Container(
                 margin: EdgeInsets.only(top: 70.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -219,6 +220,10 @@ class _ForgotState extends State<Forgot> {
 
    _forgot() async{
 
+     setState(() {
+       isChecking = true;
+     });
+
     String email = forgotEmailController.text;
 
     if(email.length < 2 || email.contains(".") == false || email.contains("@") == false ){
@@ -231,6 +236,10 @@ class _ForgotState extends State<Forgot> {
         'api_key' : apiKey,
         'email': email
       }).then((response) async{
+
+        setState(() {
+          isChecking = false;
+        });
         var message = json.decode(response.body)['response'];
 
         if(message['status'] == '200'){
@@ -246,6 +255,9 @@ class _ForgotState extends State<Forgot> {
         }
       });
     }catch (e){
+      setState(() {
+        isChecking = false;
+      });
       showInSnackBar("Please check your internet connection.");
       print(e.toString());
     }

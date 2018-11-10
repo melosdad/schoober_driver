@@ -84,6 +84,8 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
   Color left = Colors.black;
   Color right = Colors.white;
 
+  var isLogin = false;
+  var isRegistering = false;
 
   saveEmail(String email) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -401,7 +403,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                   ),
                 ),
               ),
-              Container(
+              isLogin ? Center(child: CircularProgressIndicator(),) : Container(
                 margin: EdgeInsets.only(top: 170.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -648,7 +650,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                   ),
                 ),
               ),
-              Container(
+              isRegistering ? Center(child: CircularProgressIndicator(),) : Container(
                 margin: EdgeInsets.only(top: 340.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -730,6 +732,11 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
   //Registration and Login methods
   Future _register() async {
+
+    setState(() {
+      isRegistering = true;
+    });
+
     String name = signupNameController.text;
     String surname = signupSurnameController.text;
     String email = signupEmailController.text;
@@ -773,6 +780,9 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
         'email': email,
         'password': password
       }).then((response) async {
+        setState(() {
+          isRegistering = false;
+        });
         var message = json.decode(response.body)['response'];
 
         if (message['status'] == '200') {
@@ -796,12 +806,19 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
         }
       });
     } catch (e) {
+      setState(() {
+        isRegistering = false;
+      });
       showInSnackBar("Please check your internet connection.");
       print(e.toString());
     }
   }
 
   Future _login() async {
+
+    setState(() {
+      isLogin = true;
+    });
     String email = loginEmailController.text;
     String password = loginPasswordController.text;
 
@@ -822,6 +839,10 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
         'email': email,
         'password': password
       }).then((response) async {
+
+        setState(() {
+          isLogin = false;
+        });
         var message = json.decode(response.body)['response'];
 
         if (message['status'] == '200') {
@@ -838,6 +859,9 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
         }
       });
     } catch (e) {
+      setState(() {
+        isLogin = false;
+      });
       showInSnackBar("Please check your internet connection.");
     }
   }

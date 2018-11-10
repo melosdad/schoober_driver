@@ -27,6 +27,8 @@ class _PasswordState extends State<Password> {
   bool _obscureNewPassword = true;
   bool _obscureConfirmNewPassword = true;
 
+  var isUpdating = false;
+
   @override
   void initState() {
     getApi();
@@ -191,7 +193,7 @@ class _PasswordState extends State<Password> {
                   ),
                 ),
               ),
-              Container(
+              isUpdating ? Center(child: CircularProgressIndicator(),) : Container(
                 margin: EdgeInsets.only(top: 170.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -305,6 +307,11 @@ class _PasswordState extends State<Password> {
   }
 
   _newPassword() async {
+
+    setState(() {
+      isUpdating = true;
+    });
+
     String newPassword = txtNewPassword.text;
     String confirmNewPassword = txtConfirmNewPassword.text;
 
@@ -323,6 +330,11 @@ class _PasswordState extends State<Password> {
         'password': newPassword,
         'user_id': widget.userProfile['user_id']
       }).then((response) async {
+
+        setState(() {
+          isUpdating = false;
+        });
+
         var message = json.decode(response.body)['response'];
         if (message['status'] == '200') {
           showInSnackBar("Your new password was successfully saved. You can now login.");
@@ -331,6 +343,9 @@ class _PasswordState extends State<Password> {
         }
       });
     } catch (e) {
+      setState(() {
+        isUpdating = false;
+      });
       showInSnackBar("Please check your internet connection.");
       print(e.toString());
     }

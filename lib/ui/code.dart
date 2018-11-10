@@ -25,6 +25,7 @@ class _CodeState extends State<Code> {
 
   TextEditingController txtCode = new TextEditingController();
 
+  var isChecking = false;
   @override
   void initState() {
     getApi();
@@ -143,7 +144,7 @@ class _CodeState extends State<Code> {
                   ),
                 ),
               ),
-              Container(
+              isChecking ? Center(child: CircularProgressIndicator(),) : Container(
                 margin: EdgeInsets.only(top: 70.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -222,6 +223,10 @@ class _CodeState extends State<Code> {
 
   _forgot() async{
 
+    setState(() {
+      isChecking = true;
+    });
+
     String code = txtCode.text;
 
     if(code.length < 2 ){
@@ -235,6 +240,11 @@ class _CodeState extends State<Code> {
         'code': code,
         'user_id': widget.userProfile['user_id']
       }).then((response) async{
+
+        setState(() {
+          isChecking = false;
+        });
+
         var message = json.decode(response.body)['response'];
 
         if(message['status'] == '200'){
@@ -247,6 +257,9 @@ class _CodeState extends State<Code> {
         }
       });
     }catch (e){
+      setState(() {
+        isChecking = false;
+      });
       showInSnackBar("Please check your internet connection.");
       print(e.toString());
     }

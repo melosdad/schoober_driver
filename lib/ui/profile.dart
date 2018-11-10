@@ -42,6 +42,7 @@ class _ProfileState extends State<Profile> {
   Map updatedUserData;
   Map updatedProfileData;
 
+  var isUpdating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -367,7 +368,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
 
-              Container(
+              isUpdating ? Center(child: CircularProgressIndicator(),) : Container(
                   margin: EdgeInsets.only(top: 350.0),
                   decoration: new BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -502,6 +503,11 @@ class _ProfileState extends State<Profile> {
   }
 
   Future _update() async {
+
+    setState(() {
+      isUpdating = true;
+    });
+
     String name = txtName.text;
     String surname = txtSurname.text;
     String gender = txtGender.text;
@@ -566,6 +572,11 @@ class _ProfileState extends State<Profile> {
         'province': province,
         'code': code
       }).then((response) async {
+
+        setState(() {
+          isUpdating = false;
+        });
+
         var message = json.decode(response.body)['response'];
         if (message['status'] == '200') {
           showInSnackBar("Your profile was successfully updated.");
@@ -578,6 +589,10 @@ class _ProfileState extends State<Profile> {
         }
       });
     } catch (e) {
+      setState(() {
+        isUpdating = false;
+      });
+
       showInSnackBar("Please check your internet connection.");
     }
   }
