@@ -15,7 +15,6 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Schoober Driver"
-        android:debuggable="false"
         android:icon="@mipmap/schoober">
         <activity
             android:name=".MainActivity"

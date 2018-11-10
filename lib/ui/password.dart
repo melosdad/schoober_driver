@@ -332,9 +332,11 @@ class _PasswordState extends State<Password> {
     }
 
     try {
-      await http.post(Constants.resetPasswordUrl+"?api_key="+apiKey, body: {
-        'password': newPassword,
-        'user_id': widget.userProfile['user_id']
+      await http.post(Constants.resetPasswordUrl, body: {
+        'api_key': apiKey,
+        'user_id': widget.userProfile['user_id'],
+        'password': newPassword
+
       }).then((response) async {
 
         setState(() {
@@ -347,6 +349,7 @@ class _PasswordState extends State<Password> {
         } else {
           showInSnackBar(message['message']);
         }
+
       });
     } catch (e) {
       setState(() {
