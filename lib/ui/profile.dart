@@ -46,6 +46,9 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Profile"),
+      ),
       key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (overscroll) {
@@ -66,36 +69,15 @@ class _ProfileState extends State<Profile> {
                 .size
                 .height
                 : 775.0,
-            decoration: new BoxDecoration(
-//              gradient: new LinearGradient(
-//                  colors: [
-//                    Theme.Colors.loginGradientStart,
-//                    Theme.Colors.loginGradientEnd
-//                  ],
-//                  begin: const FractionalOffset(0.0, 0.0),
-//                  end: const FractionalOffset(1.0, 1.0),
-//                  stops: [0.0, 1.0],
-//                  tileMode: TileMode.clamp),
-            ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 50.0),
-                  child: Text("Profile", style: TextStyle(
-                    fontSize: 30.0, fontFamily: "WorkSansSemiBold",),),
-                ),
-                Container(
-                  width: 250.0,
-                  height: 1.0,
-                  color: Colors.grey[400],
-                ),
                 Expanded(
                   flex: 1,
                   child:
                   new ConstrainedBox(
                     constraints: const BoxConstraints.expand(),
-                    child: _buildSignUp(context),
+                    child: _buildProfile(context),
                   ),
 
                 ),
@@ -108,14 +90,14 @@ class _ProfileState extends State<Profile> {
   }
 
 
-  Widget _buildSignUp(BuildContext context) {
+  Widget _buildProfile(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10.0),
       child: Column(
         children: <Widget>[
 
           Container(
-            margin: EdgeInsets.only(top: 0.0),
+            margin: EdgeInsets.only(bottom: 7.0),
             decoration: new BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               gradient: new LinearGradient(
@@ -159,7 +141,7 @@ class _ProfileState extends State<Profile> {
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                            bottom: 20.0, left: 25.0, right: 25.0),
+                            top:20.0,bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
                           controller: txtName,
                           focusNode: txtNameFocus,
@@ -386,9 +368,9 @@ class _ProfileState extends State<Profile> {
               ),
 
               Container(
-                margin: EdgeInsets.only(top: 340.0),
-                decoration: new BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  margin: EdgeInsets.only(top: 350.0),
+                  decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
 //                  boxShadow: <BoxShadow>[
 //                    BoxShadow(
 //                      color: Colors.blue,
@@ -401,85 +383,70 @@ class _ProfileState extends State<Profile> {
 //                      blurRadius: 20.0,
 //                    ),
 //                  ],
-                  gradient: new LinearGradient(
-                      colors: [
-                        Colors.blue,
-                        Colors.lightBlue
-                      ],
-                      begin: const FractionalOffset(0.2, 0.2),
-                      end: const FractionalOffset(1.0, 1.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp),
-                ),
-                child: MaterialButton(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.white,
-                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
-                      child: Text(
-                        "Update Profile",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontFamily: "WorkSansBold"),
-                      ),
-                    ),
-                    onPressed: () {
-                      _update();
-                    }),
-              ),
+                    gradient: new LinearGradient(
+                        colors: [
+                          Colors.blue,
+                          Colors.lightBlue
+                        ],
+                        begin: const FractionalOffset(0.2, 0.2),
+                        end: const FractionalOffset(1.0, 1.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),
+                  ),
+                  child:
 
-              Container(
-                margin: EdgeInsets.only(top: 400.0),
-                decoration: new BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-//                  boxShadow: <BoxShadow>[
-//                    BoxShadow(
-//                      color: Colors.blue,
-//                      offset: Offset(1.0, 6.0),
-//                      blurRadius: 20.0,
-//                    ),
-//                    BoxShadow(
-//                      color: Colors.lightBlue,
-//                      offset: Offset(1.0, 6.0),
-//                      blurRadius: 20.0,
-//                    ),
-//                  ],
-                  gradient: new LinearGradient(
-                      colors: [
-                        Colors.blue,
-                        Colors.lightBlue
-                      ],
-                      begin: const FractionalOffset(0.2, 0.2),
-                      end: const FractionalOffset(1.0, 1.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp),
-                ),
-                child: MaterialButton(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.white,
-                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
-                      child: Text(
-                        "Return Home",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontFamily: "WorkSansBold"),
+                  new Column(
+                    children: <Widget>[
+                      MaterialButton(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.white,
+                          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10.0),
+                            child: Text(
+                              "Update Profile",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25.0,
+                                  fontFamily: "WorkSansBold"),
+                            ),
+                          ),
+                          onPressed: () {
+                            _update();
+                          }),
+                      Container(
+                        width: 250.0,
+                        height: 6.0,
+                        color: Colors.white,
                       ),
-                    ),
-                    onPressed: () {
-                      var route = new MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                        new Home(updatedUserData, updatedProfileData),
-                      );
-                      Navigator.of(context).pushAndRemoveUntil(
-                          route, (Route<dynamic> route) => false);
-                    }),
+                      MaterialButton(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.white,
+                          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10.0),
+                            child: Text(
+                              "Return Home",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25.0,
+                                  fontFamily: "WorkSansBold"),
+                            ),
+                          ),
+                          onPressed: () {
+                            var route = new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                              new Home(updatedUserData, updatedProfileData),
+                            );
+                            Navigator.of(context).pushAndRemoveUntil(
+                                route, (Route<dynamic> route) => false);
+                          }),
+                    ],
+                  )
+
+
               ),
             ],
           ),
@@ -606,7 +573,6 @@ class _ProfileState extends State<Profile> {
           setState(() {
             updatedProfileData = message['profile'];
           });
-
         } else {
           showInSnackBar(message['message']);
         }
